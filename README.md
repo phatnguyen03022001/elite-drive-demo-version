@@ -1,6 +1,12 @@
 # EliteDrive - Car Rental Management System
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://elite-drive-iota.vercel.app/)
+
+---
+
 EliteDrive là một hệ thống quản lý cho thuê xe được xây dựng bằng **Next.js** (client), **NestJS** (server), và **MongoDB** (database).
+
+**🌐 Live Demo:** [https://elite-drive-iota.vercel.app/](https://elite-drive-iota.vercel.app/)
 
 ## 🏗️ Cấu trúc dự án
 
