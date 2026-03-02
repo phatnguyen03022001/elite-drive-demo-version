@@ -18,11 +18,17 @@ export class UploadController {
   @ApiBody({
     schema: {
       type: 'object',
-      properties: { file: { type: 'string', format: 'binary' } },
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
     },
   })
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(@UploadedFile() file: Express.Multer.File) {
+    // Gọi service để upload lên Cloudinary
     const url = await this.uploadService.uploadFile(file, 'cars');
     return { url };
   }
