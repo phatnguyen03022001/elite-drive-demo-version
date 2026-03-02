@@ -7,13 +7,13 @@ import { useMutation } from "@tanstack/react-query"; // Đảm bảo đã import
 import axios from "axios"; // Hoặc library bạn dùng để call API
 import { toast } from "sonner"; // Hoặc thư viện thông báo của bạn
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://elitedrive-demoversion.onrender.com/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://elitedrive-demoversion.onrender.com";
 
 const useVerifyRegisterOtp = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: async (payload: any) => {
-      const { data } = await axios.post(`${API_URL}/auth/otp/register`, payload);
+      const { data } = await axios.post(`${API_URL}/api/auth/otp/register`, payload);
       return data;
     },
     onSuccess: () => {
@@ -30,7 +30,7 @@ const useVerifyLoginOtp = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: async (payload: any) => {
-      const { data } = await axios.post(`${API_URL}/auth/otp/login`, payload);
+      const { data } = await axios.post(`${API_URL}/api/auth/otp/login`, payload);
       return data;
     },
     onSuccess: (data) => {
@@ -48,7 +48,7 @@ const useVerifyForgotOtp = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: async (payload: any) => {
-      const { data } = await axios.post(`${API_URL}/auth/otp/forgot-password`, payload);
+      const { data } = await axios.post(`${API_URL}/api/auth/otp/forgot-password`, payload);
       return data;
     },
     onSuccess: (data) => {
