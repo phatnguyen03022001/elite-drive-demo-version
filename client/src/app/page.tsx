@@ -55,7 +55,7 @@ export default function EliteDriveLanding() {
               Quy trình
             </a>
           </div>
-          <Button className="rounded-full px-6">Hotline: 039 999 6868</Button>
+          <Button className="rounded-full px-6">Hotline: O37 655 2019</Button>
         </div>
       </nav>
 
@@ -346,7 +346,7 @@ export default function EliteDriveLanding() {
           </div>
           <div className="text-center md:text-right">
             <p className="font-bold mb-2">Hotline hỗ trợ 24/7</p>
-            <p className="text-2xl font-black">039 999 6868</p>
+            <p className="text-2xl font-black"> O37 655 2019</p>
             <p className="text-xs text-muted-foreground mt-2">© 2026 Elite Drive - TP. Hồ Chí Minh</p>
           </div>
         </div>
