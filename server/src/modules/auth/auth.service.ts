@@ -106,11 +106,10 @@ export class AuthService {
   }
 
   async verifyRegisterOtp(dto: VerifyOtpDto) {
+    // 1. Kiểm tra OTP & Tự động update isVerified bên trong verifyOtp
     await this.verifyOtp(dto.email, dto.code, 'REGISTER');
-    await this.prisma.user.update({
-      where: { email: dto.email },
-      data: { isVerified: true },
-    });
+
+    // 2. Xóa OTP
     await this.prisma.oTP.deleteMany({
       where: { email: dto.email, type: 'REGISTER' },
     });
@@ -139,27 +138,21 @@ export class AuthService {
   }
 
   async verifyLoginOtp(dto: VerifyOtpDto) {
-    // 1. Kiểm tra OTP (giả sử hàm verifyOtp đã ném lỗi nếu sai/hết hạn)
     await this.verifyOtp(dto.email, dto.code, 'LOGIN');
 
-    // 2. Cập nhật isVerified và lấy thông tin User trong 1 bước
-    const user = await this.prisma.user
-      .update({
-        where: { email: dto.email },
-        data: { isVerified: true },
-      })
-      .catch(() => {
-        throw new NotFoundException('Tài khoản không tồn tại');
-      });
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
 
-    // 3. Xóa sạch các OTP cùng loại của email này
+    if (!user) throw new NotFoundException('Tài khoản không tồn tại');
+
     await this.prisma.oTP.deleteMany({
       where: { email: dto.email, type: 'LOGIN' },
     });
 
-    // 4. Trả về Access Token & Refresh Token
     return this.generateTokens(user);
   }
+
   async forgotPassword(dto: ForgotPasswordDto) {
     await this.verifyOtp(dto.email, dto.code, 'FORGOT_PASSWORD');
 
@@ -178,27 +171,15 @@ export class AuthService {
   }
 
   async verifyForgotOtp(dto: VerifyOtpDto) {
-    // 1. Kiểm tra OTP
     await this.verifyOtp(dto.email, dto.code, 'FORGOT_PASSWORD');
 
-    // 2. Tùy chọn: Cập nhật isVerified (Nếu họ quên pass nhưng chưa verify thì tiện tay verify luôn)
-    await this.prisma.user
-      .update({
-        where: { email: dto.email },
-        data: { isVerified: true },
-      })
-      .catch(() => {
-        throw new NotFoundException('Tài khoản không tồn tại');
-      });
-
-    // 3. Xóa OTP sau khi dùng
     await this.prisma.oTP.deleteMany({
       where: { email: dto.email, type: 'FORGOT_PASSWORD' },
     });
 
     return {
       message: 'OTP hợp lệ, bạn có thể đặt lại mật khẩu',
-      email: dto.email, // Trả về email để Frontend dùng cho bước reset tiếp theo
+      email: dto.email,
     };
   }
 
@@ -228,10 +209,25 @@ export class AuthService {
 
   private async verifyOtp(email: string, code: string, type: string) {
     const otp = await this.prisma.oTP.findFirst({
-      where: { email, code, type, expiresAt: { gt: new Date() } },
+      where: {
+        email,
+        code,
+        type,
+        expiresAt: { gt: new Date() },
+      },
     });
 
-    if (!otp) throw new BadRequestException('OTP không hợp lệ hoặc đã hết hạn');
+    if (!otp) {
+      throw new BadRequestException('OTP không hợp lệ hoặc đã hết hạn');
+    }
+
+    // Sau khi xác thực OTP đúng, tự động update isVerified cho User
+    // Sử dụng updateMany hoặc update kèm catch để tránh lỗi nếu user chưa tồn tại (tùy logic)
+    await this.prisma.user.updateMany({
+      where: { email, isVerified: false },
+      data: { isVerified: true },
+    });
+
     return otp;
   }
 
