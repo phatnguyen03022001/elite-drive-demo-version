@@ -27,7 +27,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
     <div className="flex flex-col h-full bg-sidebar text-sidebar-foreground border-sidebar-border">
       {/* 1. Brand Header - Tự động đổi màu/text theo Role */}
       <div className="h-20 flex items-center px-6 shrink-0">
-        <Link href={`/${role.toLowerCase()}/dashboard`} className="flex items-center gap-3">
+        <Link href={`/`} className="flex items-center gap-3">
           <div
             className={cn(
               "flex h-10 w-10 items-center justify-center rounded-xl shadow-lg transition-transform hover:rotate-3",

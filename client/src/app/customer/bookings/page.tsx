@@ -35,46 +35,40 @@ import Image from "next/image";
 
 import { Textarea } from "@/components/ui/textarea";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 const API_CUSTOMER = `${BASE_URL}/api/customer`;
 
-const getBaseApi = () => {
-  // Ưu tiên dùng đường dẫn tương đối để tận dụng "rewrites" trong next.config.ts
-  // Nếu bạn đã cấu hình rewrite /api -> Backend, thì chỉ cần để "/api"
-  return "/api/customer";
-};
-
+// 2. Khởi tạo Instance với API_CUSTOMER
 const axiosInstance = axios.create({
+  baseURL: API_CUSTOMER, // Luôn sử dụng URL tuyệt đối từ biến môi trường
+  withCredentials: true, // Cần thiết để làm việc với Cookie/Session trên Render
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// 2. Cập nhật baseURL linh hoạt trong interceptor hoặc trước khi gọi
+// 3. Interceptor gắn Token
 axiosInstance.interceptors.request.use((config) => {
-  const token = Cookies.get("token");
-  config.baseURL = getBaseApi(); // Đảm bảo luôn lấy URL mới nhất
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  if (typeof window !== "undefined") {
+    const token = Cookies.get("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 });
 
-// 3. Hàm gọi API an toàn hơn
+// 4. Hàm gọi API rút gọn
 const callAPI = async (endpoint: string, options: any = {}) => {
   try {
-    // Đảm bảo endpoint bắt đầu bằng "/"
-    const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
-
     const response = await axiosInstance({
-      url: cleanEndpoint,
+      url: endpoint, // endpoint truyền vào ví dụ: "/bookings"
       method: options.method || "GET",
-      data: options.body,
+      data: options.body, // KHÔNG dùng JSON.stringify ở đây, Axios sẽ tự xử lý
       params: options.params,
     });
     return response.data;
   } catch (error: any) {
-    console.error("API Error Detail:", error.response); // Log để debug trên Vercel console
     const message = error.response?.data?.message || error.message || "API Error";
     throw new Error(message);
   }

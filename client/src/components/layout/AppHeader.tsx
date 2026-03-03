@@ -45,7 +45,7 @@ export function AppHeader() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/${roleBase}/dashboard`} className="transition-colors hover:text-primary">
+              <BreadcrumbLink href={`/`} className="transition-colors hover:text-primary">
                 Elite Drive
               </BreadcrumbLink>
             </BreadcrumbItem>

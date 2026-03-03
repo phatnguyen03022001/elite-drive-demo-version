@@ -29,7 +29,6 @@ export const ROLE_NAV_CONFIG = {
     {
       label: "Khám phá",
       items: [
-        // { title: "Trang chủ", href: "/customer/dashboard", icon: Home },
         { title: "Tìm thuê xe", href: "/customer/cars", icon: Car },
         { title: "Ưu đãi", href: "/customer/promotions", icon: TicketPercent }, // ✅ Backend có
       ],
@@ -38,14 +37,6 @@ export const ROLE_NAV_CONFIG = {
       label: "Đặt xe",
       items: [{ title: "Lịch sử đặt xe", href: "/customer/bookings", icon: History }],
     },
-    // {
-    //   label: "Thanh toán",
-    //   items: [
-    //     // ⭐ NEW: Nạp tiền ví
-    //     { title: "Nạp tiền ví", href: "/customer/wallet/topup", icon: CreditCard },
-    //     { title: "Lịch sử giao dịch", href: "/customer/wallet/transactions", icon: Wallet },
-    //   ],
-    // },
     {
       label: "Tài khoản",
       items: [
