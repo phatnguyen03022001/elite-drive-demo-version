@@ -43,7 +43,7 @@ const nextConfig: NextConfig = {
     ],
 
     // Ở Production nên để false để Next.js tối ưu ảnh (WebP/AVIF) cho khách thuê xe
-    unoptimized: false,
+    unoptimized: true,
   },
 
   async headers() {
