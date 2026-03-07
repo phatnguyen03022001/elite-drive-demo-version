@@ -345,7 +345,7 @@ export default function EliteDriveLanding() {
             <p className="text-muted-foreground text-sm">Nơi mọi chuyến đi tại Sài Gòn đều xứng đáng đẳng cấp.</p>
           </div>
           <div className="text-center md:text-right">
-            <p className="font-bold mb-2">Hotline hỗ trợ 24/7</p>
+            <p className="font-bold mb-2">Hotline h ỗ trợ 24/7</p>
             <p className="text-2xl font-black"> O37 655 2019</p>
             <p className="text-xs text-muted-foreground mt-2">© 2026 Elite Drive - TP. Hồ Chí Minh</p>
           </div>
